@@ -1,10 +1,6 @@
 %   SARCreateSampleNetwork, Create an example ROS network
 %   This network features two nodes, 1 publisher, 1 subscriber. Additionally we use a
 %   timer to control publishing of ROS messages over the network.
-% global f1
-% global f2
-% f2 = figure;
-% f1 = figure;
 
 %% Initialize two nodes (in addition to the global MATLAB node that is 
 % created through rosinit). Note that the nodes will try to connect to the
@@ -27,12 +23,13 @@ timerHandles.imagePub = imagePub;
 timerHandles.imagePubmsg = imagePubmsg;
 timerHandles.camObj = webcam(2);
 simTimer = ImgTimer(0.1, {@ImgPublisher,timerHandles});
-global pixPub
-global pixPubmsg
-pixPub = robotics.ros.Publisher(node_2, '/pixels', 'std_msgs/Int32');
-pixPubmsg = rosmessage(pixPub);
-pixSub = robotics.ros.Subscriber(node_3, 'pixels');
+
 %% setup subscriber callback
 sub = robotics.ros.Subscriber(node_2,'/image',@ImgCallback)
 
-subp = robotics.ros.Subscriber(node_3, '/pixels', @DistCallback)
+
+pixPub = robotics.ros.Publisher(node_2, '/int32', 'std_msgs/int32');
+pixPubmsg = rosmessage(pixPub);
+pixSub = robotics.ros.Subscriber(node_3, 'dist');
+
+subp = robotics.ros.Subscriber(node_3
