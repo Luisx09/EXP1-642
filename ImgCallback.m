@@ -28,6 +28,9 @@ imBinary = imcomplement(imBinaryR&imBinaryG&imBinaryB);
 
 imClean = imfill(imBinary, 'holes');
 %imClean = imclearborder(imClean);
+white_pix_num = sum(imClean(:) == 1);
 imshow(imClean);
+text(25, 25, int2str(white_pix_num), 'Color', 'white', 'FontSize', 12);
+
 
 end
