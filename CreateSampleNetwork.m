@@ -1,15 +1,13 @@
-%   SARCreateSampleNetwork, Create an example ROS network
-%   This network features two nodes, 1 publisher, 1 subscriber. Additionally we use a
-%   timer to control publishing of ROS messages over the network.
+% CreateSampleNetwork
+% 
+% Attempt to create multiple figures
 % global f1
 % global f2
 % f2 = figure;
 % f1 = figure;
 
-%% Initialize two nodes (in addition to the global MATLAB node that is 
-% created through rosinit). Note that the nodes will try to connect to the
-% ROS master at 'localhost'. If you are connecting to an external master,
-% you will have to use its IP address or hostname.
+%% Initialize nodes
+% Initialize all three nodes for program
 masterHost = 'localhost';
 node_1 = robotics.ros.Node('image_acq', masterHost);
 node_2 = robotics.ros.Node('image_disp', masterHost);
@@ -21,18 +19,22 @@ imagePubmsg = rosmessage(imagePub);
 imageSub = robotics.ros.Subscriber(node_2, 'image');
 
 %% setup publisher timer
-% Create a timer for publishing messages and assign appropriate handles
-% The timer will call SARPublisher at a rate of 10 Hz.
+% Create a timer for publishing img messages and assign appropriate handles
+% The timer will call ImgPublisher at a rate of 10 Hz.
 timerHandles.imagePub = imagePub;
 timerHandles.imagePubmsg = imagePubmsg;
-timerHandles.camObj = webcam(2);
+timerHandles.camObj = webcam(1);
 simTimer = ImgTimer(0.1, {@ImgPublisher,timerHandles});
+
+%% setup publisher and subscriber for pixels message.
+% Topic is an int32 to send number of white pixels in the image.
+% ImgCallback takes it and sends it out to calculate distance to object
 global pixPub
 global pixPubmsg
 pixPub = robotics.ros.Publisher(node_2, '/pixels', 'std_msgs/Int32');
 pixPubmsg = rosmessage(pixPub);
 pixSub = robotics.ros.Subscriber(node_3, 'pixels');
-%% setup subscriber callback
-sub = robotics.ros.Subscriber(node_2,'/image',@ImgCallback)
 
+%% setup subscriber callbacks
+sub = robotics.ros.Subscriber(node_2,'/image',@ImgCallback)
 subp = robotics.ros.Subscriber(node_3, '/pixels', @DistCallback)
