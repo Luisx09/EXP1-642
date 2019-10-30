@@ -4,7 +4,7 @@
 %     ImgPublisher(timerHandles)
 % end
 
-distances = [0 10.45 14.6 16.4 19.45 26.2 ]
-num_white_pixels = [307200 81552 46112 34969 24736 13798]
+distances = [21.5 22.2 34.5 39.5 56.2 72]
+num_white_pixels = [18500 16900 6200 4100 1200 1000]
 
 plot( distances, num_white_pixels)
